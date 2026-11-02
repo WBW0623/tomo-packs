@@ -1,0 +1,373 @@
+# Hatch questionnaire for the Shonan Institute of Technology Pack. Format: schema/hatch.schema.json
+#
+# Every question changes how Tomo behaves; its `remember` line goes into Hermes' memories/USER.md only when answered.
+# Every question can be skipped. Identifiers are stored encrypted on the student's computer and replaced by
+# {{VARIABLE}} placeholders before anything reaches the model. Only the municipality is stored, never an address.
+# Tomo never stores portal passwords: the student signs in to CampusSquare in Tomo's browser window.
+# ask: setup = first run; later = Tomo asks when the topic first comes up (and it can be filled in Memory).
+schema: 1
+version: 1
+
+sections:
+  - id: basics
+    title: { en: "About you", zh: "关于你", ja: "あなたについて" }
+    intro:
+      en: "Your name and student number never leave this computer: Tomo replaces them before sending anything."
+      zh: "你的姓名和学号不会离开这台电脑：发送任何内容之前，Tomo 都会先替换掉。"
+      ja: "氏名と学籍番号はこのコンピューターから出ません。送信前に必ず置き換えます。"
+  - id: goals
+    title: { en: "What you want from your studies", zh: "你想从学习中得到什么", ja: "学びに求めること" }
+    intro:
+      en: "This decides which courses Tomo suggests and how it talks about them."
+      zh: "这决定了 Tomo 推荐哪些课程，以及怎样介绍它们。"
+      ja: "Tomo がどの科目をすすめ、どう紹介するかが決まります。"
+  - id: style
+    title: { en: "How you like to learn", zh: "你喜欢怎样学习", ja: "学び方の好み" }
+  - id: language
+    title: { en: "Language", zh: "语言", ja: "言語" }
+  - id: life
+    title: { en: "Life and school systems", zh: "生活与学校系统", ja: "生活と学校のシステム" }
+
+questions:
+  # ------------------------------------------------------------------ basics
+  - id: full_name
+    section: basics
+    ask: setup
+    type: identifier
+    variable: FULL_NAME
+    aliases: [name, furigana]
+    label: { en: "Your name", zh: "你的姓名", ja: "氏名" }
+    why:
+      en: "Your name as written and its furigana, so Tomo can find either in pages and documents and replace it before anything is sent."
+      zh: "姓名的写法和它的フリガナ，让 Tomo 能在网页和文件中找到并在发送前替换掉。"
+      ja: "氏名とフリガナです。ページや書類の中でどちらも見つけ、送信前に置き換えるためです。"
+    remember: "The student's name is {{FULL_NAME}}."
+
+  - id: student_number
+    section: basics
+    ask: setup
+    type: identifier
+    variable: STUDENT_NUMBER
+    validate: "^[0-9]{2}[A-Z][0-9]{4}$"
+    label: { en: "Student number", zh: "学号", ja: "学籍番号" }
+    placeholder: { en: "2 digits, a letter, 4 digits", zh: "2 位数字 + 1 个字母 + 4 位数字", ja: "数字 2 桁 + 英字 1 文字 + 数字 4 桁" }
+    why:
+      en: "Replaced before anything is sent. It also tells Tomo your entry year and faculty."
+      zh: "发送前会被替换。它也能告诉 Tomo 你的入学年份和学部。"
+      ja: "送信前に置き換えます。入学年度と学部の判別にも使います。"
+    remember: "Student number: {{STUDENT_NUMBER}}."
+
+  - id: faculty
+    section: basics
+    ask: setup
+    type: choice
+    label: { en: "Faculty", zh: "学部", ja: "学部" }
+    why:
+      en: "Courses with the same name differ between the two faculties."
+      zh: "同名课程在两个学部之间会有差别。"
+      ja: "同じ名前の科目でも学部によって扱いが異なるためです。"
+    options:
+      - { value: A, label: { en: "Faculty of Engineering", zh: "工学部", ja: "工学部" } }
+      - { value: B, label: { en: "Faculty of Information", zh: "情报学部", ja: "情報学部" } }
+    prefill_from: { question: student_number, regex: "^[0-9]{2}([AB])", group: 1 }
+    remember: "Faculty: {answer}."
+
+  - id: department
+    section: basics
+    ask: setup
+    type: choice
+    allow_other: true
+    label: { en: "Department or major", zh: "学科或专攻", ja: "学科・専攻" }
+    why:
+      en: "Required courses and credits depend on it."
+      zh: "必修课和学分要求取决于它。"
+      ja: "必修科目と単位要件が変わるためです。"
+    # Faculty of Engineering departments; Faculty of Information (情報学科) majors.
+    options:
+      - { value: 機械工学科, when: "faculty == A", label: { en: "Mechanical Engineering", zh: "机械工学科", ja: "機械工学科" } }
+      - { value: 電気電子工学科, when: "faculty == A", label: { en: "Electrical and Electronic Engineering", zh: "电气电子工学科", ja: "電気電子工学科" } }
+      - { value: 人間環境学科, when: "faculty == A", label: { en: "Human Environment", zh: "人间环境学科", ja: "人間環境学科" } }
+      - { value: 総合デザイン学科, when: "faculty == A", label: { en: "Integrated Design", zh: "综合设计学科", ja: "総合デザイン学科" } }
+      - { value: 情報工学科, when: "faculty == A", label: { en: "Information Engineering (Faculty of Engineering)", zh: "情报工学科（工学部）", ja: "情報工学科（工学部）" } }
+      - { value: コンピュータ応用学科, when: "faculty == A", label: { en: "Applied Computer Science", zh: "计算机应用学科", ja: "コンピュータ応用学科" } }
+      - { value: 人工知能専攻, when: "faculty == B", label: { en: "Artificial Intelligence major", zh: "人工智能专攻", ja: "人工知能専攻" } }
+      - { value: 情報工学専攻, when: "faculty == B", label: { en: "Information Engineering major", zh: "情报工学专攻", ja: "情報工学専攻" } }
+      - { value: 情報メディア専攻, when: "faculty == B", label: { en: "Information Media major", zh: "情报媒体专攻", ja: "情報メディア専攻" } }
+      - { value: 社会情報学専攻, when: "faculty == B", label: { en: "Social Informatics major", zh: "社会情报学专攻", ja: "社会情報学専攻" } }
+    # Faculty of Information: the first of the four digits is the major (1–4). No mapping known for Engineering.
+    prefill_from:
+      question: student_number
+      regex: "^[0-9]{2}B([1-4])"
+      group: 1
+      map: { "1": "人工知能専攻", "2": "情報工学専攻", "3": "情報メディア専攻", "4": "社会情報学専攻" }
+    remember: "Department / major: {answer}."
+
+  - id: year
+    section: basics
+    ask: setup
+    type: number
+    range: [1, 4]
+    label: { en: "Year", zh: "年级", ja: "学年" }
+    why:
+      en: "To show the deadlines and requirements for your year."
+      zh: "用于显示你这个年级的截止日期和要求。"
+      ja: "学年に合った締切と要件を示すためです。"
+    remember: "Year {answer}."
+
+  - id: entry_year
+    section: basics
+    ask: setup
+    type: number
+    range: [2018, 2030]
+    label: { en: "Year you entered", zh: "入学年份", ja: "入学年度" }
+    why:
+      en: "Decides which rules and curriculum version apply to you."
+      zh: "决定适用于你的规则和课程体系版本。"
+      ja: "適用される規則とカリキュラムの年度が決まるためです。"
+    prefill_from: { question: student_number, regex: "^([0-9]{2})", group: 1, prefix: "20" }
+    remember: "Entered in {answer}; use that year's curriculum and rules."
+
+  # ------------------------------------------------------------------ goals
+  - id: main_goal
+    section: goals
+    ask: setup
+    type: multi
+    max_select: 2
+    allow_other: true
+    label: { en: "What matters most to you this year?", zh: "今年对你来说最重要的是什么？", ja: "今年いちばん大事なことは？" }
+    why:
+      en: "Tomo weighs course suggestions and reminders by this."
+      zh: "Tomo 会据此权衡推荐的课程和提醒。"
+      ja: "科目の提案やリマインダーの優先度に使います。"
+    options:
+      - { value: graduate_on_time, label: { en: "Graduate on time", zh: "按时毕业", ja: "予定どおり卒業する" } }
+      - { value: job_skills, label: { en: "Skills for a job", zh: "学到能就业的本领", ja: "就職に役立つ力をつける" } }
+      - { value: grad_school, label: { en: "Prepare for graduate school", zh: "准备读研", ja: "大学院の準備" } }
+      - { value: good_grades, label: { en: "Good grades (GPA, scholarships)", zh: "取得好成绩（GPA、奖学金）", ja: "良い成績（GPA・奨学金）" } }
+      - { value: explore, label: { en: "Explore what interests me", zh: "探索自己感兴趣的方向", ja: "興味のあることを探す" } }
+      - { value: japanese, label: { en: "Improve my Japanese", zh: "提高日语", ja: "日本語を伸ばす" } }
+      - { value: teaching_licence, label: { en: "Teaching licence (教職課程)", zh: "取得教师资格（教职课程）", ja: "教員免許（教職課程）" } }
+    remember: "Main goals this year: {answer}."
+
+  - id: workload
+    section: goals
+    ask: setup
+    type: scale
+    label: { en: "For electives, how hard should Tomo push you?", zh: "选修课方面，你希望 Tomo 怎样安排？", ja: "選択科目では、どのくらい挑戦したいですか？" }
+    why:
+      en: "Tomo always tells you the real grading and attendance rules either way; it never helps to get around them."
+      zh: "无论选哪项，Tomo 都会如实告诉你评分和出勤要求，也不会帮你绕过这些要求。"
+      ja: "どれを選んでも、評価や出席の条件はそのままお伝えします。条件を回避する手助けはしません。"
+    options:
+      - { value: challenge, label: { en: "Challenge me: courses that teach more, even if harder", zh: "挑战我：学得更多，难一点也没关系", ja: "挑戦したい：難しくても多く学べる科目" } }
+      - { value: balanced, label: { en: "Balanced", zh: "均衡", ja: "バランスよく" } }
+      - { value: light, label: { en: "Keep it light: lighter workload where it doesn't hurt my goals", zh: "轻松一点：在不影响目标的前提下选负担轻的课", ja: "軽めに：目標に影響しない範囲で負担の少ない科目" } }
+    remember: "Elective preference: {answer}. Always state real grading and attendance; never help to get around requirements."
+
+  - id: after_graduation
+    section: goals
+    ask: later
+    type: choice
+    label: { en: "After graduation you plan to …", zh: "毕业后你打算……", ja: "卒業後の予定は…" }
+    why:
+      en: "Changes which skills and certificates Tomo points out."
+      zh: "会影响 Tomo 提醒你关注哪些技能和证书。"
+      ja: "Tomo が紹介するスキルや資格が変わります。"
+    options:
+      - { value: work_japan, label: { en: "Work in Japan", zh: "在日本工作", ja: "日本で就職" } }
+      - { value: work_home, label: { en: "Work in my home country", zh: "回国工作", ja: "母国で就職" } }
+      - { value: grad_school, label: { en: "Graduate school", zh: "读研究生", ja: "大学院に進学" } }
+      - { value: undecided, label: { en: "Not decided yet", zh: "还没决定", ja: "まだ決めていない" } }
+    remember: "After graduation: {answer}."
+
+  # ------------------------------------------------------------------ style
+  - id: enjoy_subjects
+    section: style
+    ask: setup
+    type: multi
+    allow_other: true
+    label: { en: "Subjects you enjoy", zh: "你喜欢的科目方向", ja: "好きな分野" }
+    why:
+      en: "Tomo suggests electives that fit what you like. Hover an option to see real courses in it."
+      zh: "Tomo 会推荐符合你喜好的选修课。把鼠标移到选项上可以看到对应的实际课程。"
+      ja: "好みに合う選択科目を提案します。選択肢にカーソルを合わせると実際の科目が見られます。"
+    # Areas grouped from the elective courses in the school's syllabus (2026); examples are real course names.
+    options:
+      - value: programming
+        label: { en: "Programming and software", zh: "编程与软件", ja: "プログラミング・ソフトウェア" }
+        examples: [Ｊａｖａ基礎, オブジェクト指向プログラミング実習, Ｗｅｂクライアントプログラミング, モバイルプログラミング, ソフトウェア工学]
+      - value: ai_data
+        label: { en: "AI and data science", zh: "AI 与数据科学", ja: "AI・データサイエンス" }
+        examples: [人工知能, データサイエンス, 多変量解析入門, 確率統計リテラシ１, データベース]
+      - value: systems
+        label: { en: "Computer systems and security", zh: "计算机系统与安全", ja: "コンピュータシステム・セキュリティ" }
+        examples: [コンピュータアーキテクチャ, オペレーティングシステム実習, 暗号とセキュリティ, ＩｏＴ実習, 情報理論]
+      - value: media
+        label: { en: "Media, CG and games", zh: "媒体、CG 与游戏", ja: "メディア・CG・ゲーム" }
+        examples: [コンピュータグラフィックス, 映像制作, ゲーム制作実習, バーチャルリアリティ, コンピュータ音楽基礎]
+      - value: robotics
+        label: { en: "Robotics and control", zh: "机器人与控制", ja: "ロボティクス・制御" }
+        examples: [学術横断プログラム２Ａ　～ロボティクスコース～, メカトロニクス入門, 計測制御２, 制御実装基礎]
+      - value: mechanical
+        when: "faculty == A"
+        label: { en: "Mechanical engineering", zh: "机械工学", ja: "機械工学" }
+        examples: [材料力学基礎, 工業熱力学１, 流体機械, 自動車工学, 機械加工]
+      - value: electrical
+        when: "faculty == A"
+        label: { en: "Electrical, electronics and communication", zh: "电气电子与通信", ja: "電気電子・通信" }
+        examples: [電子回路１, 半導体工学１, 通信工学１, 電気機器工学, 電波とアンテナ]
+      - value: design
+        when: "faculty == A"
+        label: { en: "Product, architecture and interior design", zh: "产品、建筑与室内设计", ja: "プロダクト・建築・インテリアデザイン" }
+        examples: [プロダクトデザイン, 建築デザイン, インテリアデザイン１, モビリティデザイン, ３次元ＣＡＤ応用]
+      - value: environment_medical
+        when: "faculty == A"
+        label: { en: "Environment, chemistry and medical engineering", zh: "环境、化学与医工学", ja: "環境・化学・医工学" }
+        examples: [環境技術論, 化学工学, 医用機器概論, 脳科学, 人工臓器概論]
+      - value: business
+        label: { en: "Business, accounting and careers", zh: "商业、会计与职业", ja: "ビジネス・会計・キャリア" }
+        examples: [会計データ処理２, 金融情報処理１, マネジメントサイエンス, ブランド戦略コミュニケーション, キャリアマネジメント]
+      - value: math
+        label: { en: "Mathematics", zh: "数学", ja: "数学" }
+        examples: [プログラミングのための線形代数１, 応用数学, 数値計算法, 基礎数学]
+      - value: humanities
+        label: { en: "History, economics, law and psychology", zh: "历史、经济、法律与心理", ja: "歴史・経済・法・心理" }
+        examples: [歴史をみつめる, 市場と経済, くらしと法, 心理をよむ, 政治行動]
+      - value: languages
+        label: { en: "Languages and culture", zh: "语言与文化", ja: "語学・文化" }
+        examples: [実用英語, 中国文化言語, 朝鮮文化言語, 海外語学研修]
+      - value: sports
+        label: { en: "Sports and the sea", zh: "体育与海洋", ja: "スポーツ・海洋" }
+        examples: [スポーツを分析する, 生涯スポーツ論, サーフィン実習, マリンスポーツ工学, 海洋環境科学]
+    remember: "Enjoys: {answer}."
+
+  - id: formats
+    section: style
+    ask: setup
+    type: multi
+    label: { en: "Course formats that suit you", zh: "适合你的上课形式", ja: "合っている授業の形式" }
+    why:
+      en: "The syllabus tells how each course runs and is graded; Tomo matches it to you."
+      zh: "大纲里写着每门课怎么上、怎么评分，Tomo 会据此和你匹配。"
+      ja: "シラバスに授業の進め方と評価方法があるので、それに合わせて提案します。"
+    options:
+      - { value: hands_on, label: { en: "Hands-on exercises", zh: "动手练习", ja: "演習・実習" } }
+      - { value: projects, label: { en: "Group projects", zh: "小组项目", ja: "グループワーク" } }
+      - { value: lectures, label: { en: "Lectures", zh: "讲授课", ja: "講義" } }
+      - { value: reports, label: { en: "Graded by reports", zh: "以报告评分", ja: "レポートで評価" } }
+      - { value: exams, label: { en: "Graded by exams", zh: "以考试评分", ja: "試験で評価" } }
+      - { value: online, label: { en: "Online / recorded classes", zh: "线上或录播课", ja: "オンライン・オンデマンド" } }
+    remember: "Prefers course formats: {answer}."
+
+  - id: hard_subjects
+    section: style
+    ask: later
+    type: multi
+    allow_other: true
+    label: { en: "Subjects you find hard", zh: "你觉得吃力的科目", ja: "苦手な分野" }
+    why:
+      en: "Tomo avoids stacking them in one term and points you to support."
+      zh: "Tomo 会避免把它们堆在同一学期，并告诉你可以去哪里求助。"
+      ja: "同じ学期に重ならないようにし、相談先を案内します。"
+    options:
+      - { value: math, label: { en: "Mathematics", zh: "数学", ja: "数学" }, examples: [線形代数, 微分積分学, 確率統計リテラシ１] }
+      - { value: physics, label: { en: "Physics and mechanics", zh: "物理与力学", ja: "物理・力学" }, examples: [電気の物理１, 工業基礎力学, 材料力学基礎] }
+      - { value: programming, label: { en: "Programming", zh: "编程", ja: "プログラミング" }, examples: [Ｊａｖａ基礎, アルゴリズムとデータ構造実習] }
+      - { value: circuits, when: "faculty == A", label: { en: "Electric circuits", zh: "电路", ja: "電気回路" }, examples: [交流電気回路, 電子回路１] }
+      - { value: japanese_writing, label: { en: "Writing in Japanese", zh: "日语写作", ja: "日本語の文章" } }
+      - { value: english, label: { en: "English", zh: "英语", ja: "英語" }, examples: [英語リテラシー２, 実用英語] }
+    remember: "Finds hard: {answer}. Avoid stacking these in one term; mention support."
+
+  - id: busy_times
+    section: style
+    ask: later
+    type: multi
+    label: { en: "When you usually can't take classes", zh: "你通常不能上课的时间", ja: "授業を取れないことが多い時間" }
+    why:
+      en: "For example part-time work. Tomo keeps these free when planning a timetable."
+      zh: "比如打工。排课表时，Tomo 会空出这些时间。"
+      ja: "アルバイトなど。時間割を考えるときに空けておきます。"
+    options:
+      - { value: mon, label: { en: "Monday", zh: "周一", ja: "月曜" } }
+      - { value: tue, label: { en: "Tuesday", zh: "周二", ja: "火曜" } }
+      - { value: wed, label: { en: "Wednesday", zh: "周三", ja: "水曜" } }
+      - { value: thu, label: { en: "Thursday", zh: "周四", ja: "木曜" } }
+      - { value: fri, label: { en: "Friday", zh: "周五", ja: "金曜" } }
+      - { value: sat, label: { en: "Saturday", zh: "周六", ja: "土曜" } }
+      - { value: evenings, label: { en: "Late periods (5th and later)", zh: "第 5 节及以后", ja: "5限以降" } }
+    remember: "Usually unavailable: {answer}. Keep these free in timetable suggestions."
+
+  # ------------------------------------------------------------------ language
+  - id: japanese_level
+    section: language
+    ask: setup
+    type: scale
+    label: { en: "Your Japanese", zh: "你的日语水平", ja: "日本語のレベル" }
+    why:
+      en: "So Tomo explains Japanese terms and documents at the right level."
+      zh: "让 Tomo 用合适的难度解释日语术语和文件。"
+      ja: "用語や書類を適切なレベルで説明するためです。"
+    options:
+      - { value: beginner, label: { en: "Beginner (N4 or below)", zh: "入门（N4 及以下）", ja: "初級（N4 以下）" } }
+      - { value: intermediate, label: { en: "Intermediate (N3–N2)", zh: "中级（N3–N2）", ja: "中級（N3〜N2）" } }
+      - { value: advanced, label: { en: "Advanced (N1)", zh: "高级（N1）", ja: "上級（N1）" } }
+      - { value: native, label: { en: "Native", zh: "母语", ja: "母語" } }
+    remember: "Japanese level: {answer}."
+
+  - id: answer_style
+    section: language
+    ask: later
+    type: scale
+    label: { en: "Answers should be …", zh: "回答希望……", ja: "回答は…" }
+    why:
+      en: "Short answers or step-by-step explanations."
+      zh: "简短一点，还是一步一步讲清楚。"
+      ja: "短く要点だけか、手順を追って詳しくか。"
+    options:
+      - { value: short, label: { en: "Short and to the point", zh: "简短直接", ja: "短く要点だけ" } }
+      - { value: detailed, label: { en: "Step by step", zh: "一步一步讲清楚", ja: "手順を追って詳しく" } }
+    remember: "Answer style: {answer}."
+
+  # ------------------------------------------------------------------ life and systems
+  - id: municipality
+    section: life
+    ask: setup
+    type: municipality
+    label: { en: "City you live in", zh: "居住的市区町村", ja: "お住まいの市区町村" }
+    placeholder: { en: "e.g. Fujisawa", zh: "例如：藤泽市", ja: "例：藤沢市" }
+    why:
+      en: "For city procedures such as residence registration. Only the city is stored, never your address."
+      zh: "用于住民登记等市政手续。只保存市区町村，绝不保存详细地址。"
+      ja: "住民登録など市区町村の手続きのためです。保存するのは市区町村だけで、住所は保存しません。"
+    remember: "Lives in {answer} (city only)."
+
+  - id: grades_consent
+    section: life
+    ask: setup
+    type: choice
+    when: "year > 1"
+    label: { en: "May Tomo read your grades when you ask?", zh: "提问时 Tomo 可以读取你的成绩吗？", ja: "質問したときに成績を読んでもよいですか？" }
+    why:
+      en: "Needed for credit checks. Tomo opens CampusSquare in a browser window you can see and reads nothing when you are not there; you still approve each item before it is sent."
+      zh: "核对学分时需要。Tomo 会在你看得见的浏览器窗口里打开 CampusSquare，你不在场时不会读取任何内容；每一项在发送前仍会逐项征求你的同意。"
+      ja: "単位の確認に必要です。見えるブラウザで CampusSquare を開き、あなたがいないときは何も読みません。送信前には項目ごとに必ず確認します。"
+    options:
+      - { value: watch, label: { en: "Yes, but only while I'm watching", zh: "可以，必须在我的注视下进行", ja: "はい、必ず私が見ている前で" } }
+      - { value: never, label: { en: "No", zh: "不可以", ja: "いいえ" } }
+    remember: "Grades: {answer}. Read them only in the visible browser while the student is present, and ask before sending any grade."
+
+  - id: anything_else
+    section: life
+    ask: setup
+    type: longtext
+    max_length: 300
+    label: { en: "Anything else Tomo should know? (optional)", zh: "还有什么想让 Tomo 知道的？（可选）", ja: "ほかに Tomo に伝えたいことは？（任意）" }
+    placeholder:
+      en: "e.g. I work weekends, I want to try research early, I get nervous writing emails to professors"
+      zh: "例如：周末要打工、想早点进研究室、给老师写邮件会紧张"
+      ja: "例：週末はアルバイト、早めに研究室に関わりたい、先生へのメールが苦手"
+    why:
+      en: "Written as you type it. Don't include ID numbers or passwords; your name is replaced anyway."
+      zh: "会按你写的原样记下。请不要填写证件号码或密码；你的姓名会被自动替换。"
+      ja: "入力したとおりに記録します。番号やパスワードは書かないでください。氏名は自動で置き換えます。"
+    remember: "In the student's words: {answer}"

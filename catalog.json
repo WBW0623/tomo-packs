@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "packs": [
+    {
+      "id": "shonan-it",
+      "name": {
+        "en": "Shonan Institute of Technology Pack",
+        "zh": "Shonan Institute of Technology Pack",
+        "ja": "Shonan Institute of Technology Pack"
+      },
+      "school": {
+        "en": "Shonan Institute of Technology",
+        "zh": "湘南工科大学",
+        "ja": "湘南工科大学"
+      },
+      "short": "湘南工科大学",
+      "domain": "shonan-it.ac.jp",
+      "version": "0.1.0",
+      "requires": {
+        "tomo": ">=0.9.0",
+        "hermes": "0.21.x"
+      },
+      "publisher": {
+        "name": "TK",
+        "github": "TkYu"
+      },
+      "lock_sha256": "eec4e0a75d312929cf57854509d08f739131f0c684938ecd30726794a8b1c13f"
+    }
+  ]
+}

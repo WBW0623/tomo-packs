@@ -1,0 +1,81 @@
+# Shonan Institute of Technology Pack — manifest. Format: schema/pack.schema.json
+schema: 1
+id: shonan-it
+name:
+  en: Shonan Institute of Technology Pack
+  zh: Shonan Institute of Technology Pack
+  ja: Shonan Institute of Technology Pack
+school:
+  name:
+    en: Shonan Institute of Technology
+    zh: 湘南工科大学
+    ja: 湘南工科大学
+  short: 湘南工科大学
+  domain: shonan-it.ac.jp
+  country: JP
+version: 0.1.0
+description:
+  en: Course and syllabus search, school rules from the term guidance, and help with the CampusSquare portal.
+  zh: 课程与大纲检索、学期指南中的校规，以及 CampusSquare 门户的操作帮助。
+  ja: 科目・シラバス検索、学期ガイダンスの規則、CampusSquare ポータルの操作サポート。
+license: MIT
+publisher:
+  name: TK
+  github: TkYu
+requires:
+  tomo: ">=0.9.0"
+  hermes: "0.21.x"
+
+permissions:
+  network:
+    - www.shonan-it.ac.jp
+    - syllabus.shonan-it.ac.jp
+  browser_origins:
+    - portal.shonan-it.ac.jp
+  personal_data:
+    - grades
+    - self_assessment
+    - timetable
+  computer_use: false
+
+sources:
+  official:
+    - shonan-it.ac.jp
+  refresh:
+    syllabus: per_term
+    site: weekly
+
+skills:
+  - campussquare        # CampusSquare portal, read-only, through the visible browser
+
+ui:
+  # Every topic and suggestion names the skill that answers it; add more as skills are written.
+  quick_topics:
+    - id: timetable
+      icon: calendar
+      skill: campussquare
+      label: { en: "My timetable", zh: "我的课表", ja: "時間割" }
+      description:
+        en: "Today's classes, cancellations, attendance and this term's registered courses, read from CampusSquare."
+        zh: "从 CampusSquare 读取今天的课、停课补课、出欠和本学期已登录的课程。"
+        ja: "CampusSquare から今日の授業、休講・補講、出欠、今学期の履修科目を読み取ります。"
+      prompts:
+        - { en: "What classes do I have today?", zh: "我今天有什么课？", ja: "今日の授業は？" }
+        - { en: "Are any of my classes cancelled?", zh: "我的课有停课吗？", ja: "休講になった授業はある？" }
+        - { en: "How many credits can I still register this term?", zh: "这学期我还能登录多少学分？", ja: "今学期あと何単位登録できる？" }
+    - id: credits
+      icon: graduation
+      skill: campussquare
+      label: { en: "Credits & graduation", zh: "学分与毕业", ja: "単位・卒業" }
+      description:
+        en: "Grades, GPA and the graduation self-check (自己判定), category by category. You watch the browser while Tomo reads."
+        zh: "成绩、GPA 和毕业自己判定，按区分逐项核对。Tomo 读取时你会看着浏览器窗口。"
+        ja: "成績、GPA、自己判定を科目区分ごとに確認します。読み取り中はブラウザをご覧ください。"
+      prompts:
+        - { en: "Which categories am I still short of?", zh: "我还有哪些区分的学分不够？", ja: "まだ単位が足りない区分は？" }
+        - { en: "Can I graduate on time?", zh: "我能按时毕业吗？", ja: "予定どおり卒業できる？" }
+        - { en: "What is my GPA?", zh: "我的 GPA 是多少？", ja: "私の GPA は？" }
+  quick_ask_suggestions:
+    - { skill: campussquare, text: { en: "What classes do I have today?", zh: "我今天有什么课？", ja: "今日の授業は？" } }
+    - { skill: campussquare, text: { en: "Which categories am I still short of?", zh: "我还有哪些区分的学分不够？", ja: "まだ単位が足りない区分は？" } }
+    - { skill: campussquare, text: { en: "What is my GPA?", zh: "我的 GPA 是多少？", ja: "私の GPA は？" } }

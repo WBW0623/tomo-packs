@@ -1,0 +1,17 @@
+{
+  "pack": "shonan-it",
+  "version": "0.1.0",
+  "files": {
+    "CHANGELOG.md": "b56a887bda2aa990baab1f48338a83d53dd7f3d31e7633ee17e0d271cd745693",
+    "README.md": "ecdb0aa9801c116e16ad9c375398a541851d7c95598eafb1ca3a88eb9e31456a",
+    "data/README.md": "5895b09a395b1335fa5dcb9ca41da4425b012e37f0e4e13c7fa765ee3f71714e",
+    "evals/cases.yaml": "5177ab6fc3a03df2835d6a18f54acc8ca8244147822469404ded16035aa078fe",
+    "hatch.yaml": "dfe867c8581b9d810cffd77167b751605dd34c5363d5c47b0735b6b901b0fb24",
+    "pack.yaml": "e418c202bfbc77e24abd15d89e124a165a7c538fb979dd14e72cc45138fe0d43",
+    "skills/README.md": "010ef3b415beafc06cecb1d41b27e280b6356a1b38f0a4376714a56b9e88b7bf",
+    "skills/campussquare/SKILL.md": "d0b136a25de2139df0acf0288e3cb15d5e60d9627cceed62e060e634c07a5cd6",
+    "skills/campussquare/references/extract.md": "f4231ffa8ffbad4999f6b0e8d229af3994d178621dd48d52f185ebcce4848949",
+    "skills/campussquare/references/pages.md": "c11cec157aa4089b2dcc95631cd6ad85516f5d49971d70767c6392b9d4ca1c26",
+    "soul.md": "3afea1730fe1caf5e562588aaba735e267b4d9201cf94b4420b26c5bd94f4965"
+  }
+}

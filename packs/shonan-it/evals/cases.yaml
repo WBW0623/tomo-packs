@@ -1,0 +1,9 @@
+# Regression questions for this pack (run in CI, not installed).
+# Each case: id, question (any language), expected: sources the answer must cite and facts it must contain.
+schema: 1
+cases: []
+#  - id: registration-deadline
+#    question: When does course registration close this term?
+#    expected:
+#      cite: [shonan-it.ac.jp]
+#      contains: []
