@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tkyu-labs/tomo-packs/schema/hatch.schema.json",
+  "title": "Tomo Hatch questionnaire (hatch.yaml)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "version",
+    "sections",
+    "questions"
+  ],
+  "$defs": {
+    "i18n": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "en",
+        "zh",
+        "ja"
+      ],
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        },
+        "zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ja": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "label"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "label": {
+          "$ref": "#/$defs/i18n"
+        },
+        "when": {
+          "type": "string",
+          "description": "Show this option only if the condition holds, e.g. 'faculty == A'."
+        },
+        "examples": {
+          "type": "array",
+          "maxItems": 6,
+          "items": {
+            "type": "string"
+          },
+          "description": "Real course names from the school's syllabus, shown as a hint."
+        }
+      }
+    }
+  },
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Bump when questions change; Tomo offers 'Redo Hatch'."
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "section",
+          "ask",
+          "label",
+          "why"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "type": {
+            "enum": [
+              "text",
+              "longtext",
+              "choice",
+              "multi",
+              "scale",
+              "number",
+              "municipality",
+              "identifier",
+              "login"
+            ]
+          },
+          "label": {
+            "$ref": "#/$defs/i18n"
+          },
+          "why": {
+            "$ref": "#/$defs/i18n",
+            "description": "Shown under the question: why the pack asks."
+          },
+          "placeholder": {
+            "$ref": "#/$defs/i18n"
+          },
+          "options": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "$ref": "#/$defs/option"
+            }
+          },
+          "allow_other": {
+            "type": "boolean",
+            "description": "choice / multi: also accept free text."
+          },
+          "range": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "when": {
+            "type": "string",
+            "description": "Show only if this condition holds, e.g. 'year > 1' or 'faculty == B'."
+          },
+          "prefill_from": {
+            "type": "object",
+            "description": "Suggest an answer from another answer, e.g. entry year from the student number.",
+            "additionalProperties": false,
+            "required": [
+              "question",
+              "regex",
+              "group"
+            ],
+            "properties": {
+              "question": {
+                "type": "string"
+              },
+              "regex": {
+                "type": "string"
+              },
+              "group": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "map": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": [
+                    "string",
+                    "integer"
+                  ]
+                }
+              },
+              "prefix": {
+                "type": "string"
+              }
+            }
+          },
+          "variable": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$",
+            "description": "identifier: stored encrypted; every occurrence of the value becomes {{VARIABLE}}."
+          },
+          "validate": {
+            "type": "string",
+            "description": "Regular expression used only to check input."
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "name",
+                "furigana"
+              ]
+            },
+            "uniqueItems": true,
+            "description": "identifier: ask for each form (the name as written, its furigana reading); every form is replaced."
+          },
+          "origin": {
+            "type": "string",
+            "description": "login: the only host where Tomo may fill it."
+          },
+          "section": {
+            "type": "string",
+            "description": "Id of the page (sections[].id)."
+          },
+          "ask": {
+            "enum": [
+              "setup",
+              "later"
+            ],
+            "description": "setup = first run; later = Tomo asks when the topic first comes up (and in Memory)."
+          },
+          "max_select": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "multi: most options a student may pick."
+          },
+          "remember": {
+            "type": "string",
+            "description": "One line for memories/USER.md, written only when answered. {answer} inserts the answer (labels in English); identifiers use their {{VARIABLE}} instead."
+          },
+          "max_length": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "text / longtext: most characters accepted."
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "choice",
+                    "multi",
+                    "scale"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "options"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "identifier"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "variable"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "login"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "variable",
+                "origin"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "number"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "range"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "scale"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "options"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "sections": {
+      "description": "Pages of the questionnaire, in order. Each page shows its questions together.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "title": {
+            "$ref": "#/$defs/i18n"
+          },
+          "intro": {
+            "$ref": "#/$defs/i18n"
+          }
+        }
+      }
+    }
+  }
+}

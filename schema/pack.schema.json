@@ -1,0 +1,344 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tkyu-labs/tomo-packs/schema/pack.schema.json",
+  "title": "Tomo pack manifest (pack.yaml)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "name",
+    "school",
+    "version",
+    "license",
+    "publisher",
+    "requires",
+    "permissions",
+    "sources"
+  ],
+  "$defs": {
+    "i18n": {
+      "description": "User-facing text in all three Tomo languages.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "en",
+        "zh",
+        "ja"
+      ],
+      "properties": {
+        "en": {
+          "type": "string",
+          "minLength": 1
+        },
+        "zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ja": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "host": {
+      "description": "A host name without scheme or path, e.g. syllabus.example.ac.jp.",
+      "type": "string",
+      "pattern": "^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,}$"
+    },
+    "icon": {
+      "type": "string",
+      "enum": [
+        "book",
+        "bell",
+        "file",
+        "language",
+        "calendar",
+        "chat",
+        "search",
+        "shield",
+        "key",
+        "box",
+        "graduation"
+      ]
+    }
+  },
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "id": {
+      "description": "School domain without the public suffix, e.g. shonan-it for shonan-it.ac.jp. Must equal the folder name.",
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,40}$"
+    },
+    "name": {
+      "$ref": "#/$defs/i18n",
+      "description": "Full English school name + 'Pack', never an acronym."
+    },
+    "school": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "short",
+        "domain",
+        "country"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/i18n"
+        },
+        "short": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "description": "Shown where space is tight."
+        },
+        "domain": {
+          "$ref": "#/$defs/host"
+        },
+        "country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        }
+      }
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[0-9A-Za-z.-]+)?$"
+    },
+    "description": {
+      "$ref": "#/$defs/i18n"
+    },
+    "license": {
+      "const": "MIT",
+      "description": "Code licence; written content is CC BY 4.0 (LICENSE-CONTENT.md)."
+    },
+    "publisher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "github"
+      ],
+      "description": "Who publishes the pack; shown in Tomo's pack details and install review.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "github": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9-]{1,39}$"
+        }
+      }
+    },
+    "requires": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tomo",
+        "hermes"
+      ],
+      "properties": {
+        "tomo": {
+          "type": "string",
+          "description": "Version range, e.g. >=0.9.0"
+        },
+        "hermes": {
+          "type": "string",
+          "description": "Hermes line the pack is tested with, e.g. 0.21.x"
+        }
+      }
+    },
+    "permissions": {
+      "description": "Shown in Tomo's install review and enforced by Tomo.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "network",
+        "browser_origins",
+        "personal_data",
+        "computer_use"
+      ],
+      "properties": {
+        "network": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/host"
+          },
+          "uniqueItems": true
+        },
+        "browser_origins": {
+          "description": "Hosts where Tomo may fill identifiers or logins (with approval).",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/host"
+          },
+          "uniqueItems": true
+        },
+        "personal_data": {
+          "description": "Personal data the pack may send to the model after per-item approval.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "grades",
+              "self_assessment",
+              "timetable",
+              "contact"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "computer_use": {
+          "type": "boolean"
+        }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "official"
+      ],
+      "properties": {
+        "official": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/host"
+          },
+          "description": "Hosts (and their subdomains) treated as the school's own sources."
+        },
+        "refresh": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "enum": [
+              "per_term",
+              "monthly",
+              "weekly",
+              "daily",
+              "manual"
+            ]
+          }
+        }
+      }
+    },
+    "skills": {
+      "description": "Skill folders under skills/ (Hermes SKILL.md).",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*$"
+      },
+      "uniqueItems": true
+    },
+    "mcp": {
+      "description": "Optional stdio MCP servers under mcp/<name>/, run by Tomo's bundled runtime.",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "command",
+          "tools"
+        ],
+        "properties": {
+          "command": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "tools": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            },
+            "description": "Allowlist; other tools of the server are not exposed."
+          }
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "quick_topics": {
+          "type": "array",
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "icon",
+              "skill",
+              "label",
+              "description",
+              "prompts"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$"
+              },
+              "icon": {
+                "$ref": "#/$defs/icon"
+              },
+              "skill": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$",
+                "description": "A skill listed in `skills`; the topic or suggestion only exists because this skill can answer it."
+              },
+              "label": {
+                "$ref": "#/$defs/i18n"
+              },
+              "description": {
+                "$ref": "#/$defs/i18n"
+              },
+              "prompts": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 5,
+                "items": {
+                  "$ref": "#/$defs/i18n"
+                }
+              }
+            }
+          }
+        },
+        "quick_ask_suggestions": {
+          "type": "array",
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "skill",
+              "text"
+            ],
+            "properties": {
+              "skill": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$",
+                "description": "A skill listed in `skills`; the topic or suggestion only exists because this skill can answer it."
+              },
+              "text": {
+                "$ref": "#/$defs/i18n"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
