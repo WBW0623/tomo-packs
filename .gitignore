@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+# built locally from public sources, never committed
+packs/*/data/build/
+dist/
