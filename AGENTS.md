@@ -88,8 +88,8 @@ counted on its own:
 - **PATCH** goes up for fixes and improvements of existing features.
 - **No carry-over**: the numbers are not decimals. After `0.1.9` comes `0.1.10`, then `0.1.11`, …; only a new or
   removed feature makes it `0.2.0`. If you cannot tell whether a change is a feature or a fix, ask the maintainer.
-- Compare with the last released version: several changes before one release get one bump (the largest kind among
-  them).
+- Compare with the last released version (Tomo: the last release; packs: what is on `main`): several changes before
+  one release get one bump (the largest kind among them).
 
 ## Checking
 
@@ -99,6 +99,8 @@ python tools/validate.py          # what CI runs on every pull request
 python tools/validate.py --write  # update pack.lock files and catalog.json
 ```
 
-Releases are tagged `<id>/v<version>`; the release workflow builds and signs the archive. Bump the pack's `version`
-(see Version numbers) and `CHANGELOG.md` for a release; breaking Hatch changes also bump `hatch.yaml` → `version`
-(a single counter: 1, 2, 3, …).
+No tags or releases: `main` is the current version of every pack, and Tomo updates installed packs from it (it
+compares the catalog's `lock_sha256` and checks every file against `pack.lock`, so commit what `validate.py --write`
+produced). Bump the pack's `version` (see Version numbers) and add a `CHANGELOG.md` entry with every change that
+reaches `main` — Tomo shows that entry as "What's new". Breaking Hatch changes also bump `hatch.yaml` → `version` (a
+single counter: 1, 2, 3, …).

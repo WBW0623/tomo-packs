@@ -4,7 +4,7 @@ School packs for [Tomo](https://github.com/tkyu-labs/tomo), a desktop assistant 
 Tomo itself knows no school; a pack adds one school's knowledge, skills and first-run questionnaire (Hatch).
 
 Packs are made by the community. They are not affiliated with, endorsed by or maintained by the schools they
-describe. Tomo installs packs only from this repository, after checking the release signature.
+describe. Tomo installs packs only from this repository: the `main` branch is the current version of every pack.
 
 | Pack | School | Version |
 |---|---|---|
@@ -41,7 +41,9 @@ python tools/validate.py          # what CI runs on every pull request
 python tools/validate.py --write  # update pack.lock files and catalog.json after changes
 ```
 
-Releases are tagged `<id>/v<version>`; the release workflow builds the archive and signs it with Sigstore.
+There are no pack releases: whatever is on `main` is what Tomo installs. Tomo notices a change through the pack's
+`lock_sha256` in `catalog.json` and installs the files only when each one matches `pack.lock` — so always commit the
+files `validate.py --write` produced.
 
 ## Licence
 
