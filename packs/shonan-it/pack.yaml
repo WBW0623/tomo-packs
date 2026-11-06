@@ -15,15 +15,15 @@ school:
   country: JP
 version: 0.1.0
 description:
-  en: Course and syllabus search, school rules from the term guidance, and help with the CampusSquare portal.
-  zh: 课程与大纲检索、学期指南中的校规，以及 CampusSquare 门户的操作帮助。
-  ja: 科目・シラバス検索、学期ガイダンスの規則、CampusSquare ポータルの操作サポート。
+  en: School calendar, procedures and notices from the official website, and help with the CampusSquare portal.
+  zh: 从学校官网查找学年暦、各种手续和通知，以及 CampusSquare 门户的操作帮助。
+  ja: 公式サイトの学年暦・各種手続き・お知らせの検索と、CampusSquare ポータルの操作サポート。
 license: MIT
 publisher:
   name: TK
   github: TkYu
 requires:
-  tomo: ">=0.9.0"
+  tomo: ">=0.1.0"
   hermes: "0.21.x"
 
 permissions:
@@ -36,6 +36,11 @@ permissions:
     - grades
     - self_assessment
     - timetable
+  # every CampusSquare page is about the student: Tomo shows the model only headings and controls there and asks the
+  # student before sending any value read on it
+  personal_origins:
+    - portal.shonan-it.ac.jp
+  personal_consent: { question: grades_consent, refuse: [never] }
   computer_use: false
 
 sources:
@@ -47,6 +52,7 @@ sources:
 
 skills:
   - campussquare        # CampusSquare portal, read-only, through the visible browser
+  - school-info         # the official website: search in Japanese (site:shonan-it.ac.jp), pages and PDFs
 
 ui:
   # Every topic and suggestion names the skill that answers it; add more as skills are written.
@@ -75,7 +81,20 @@ ui:
         - { en: "Which categories am I still short of?", zh: "我还有哪些区分的学分不够？", ja: "まだ単位が足りない区分は？" }
         - { en: "Can I graduate on time?", zh: "我能按时毕业吗？", ja: "予定どおり卒業できる？" }
         - { en: "What is my GPA?", zh: "我的 GPA 是多少？", ja: "私の GPA は？" }
+    - id: school
+      icon: calendar
+      skill: school-info
+      label: { en: "Calendar & procedures", zh: "校历与手续", ja: "学年暦・手続き" }
+      description:
+        en: "Holidays, exam and registration periods, certificates and other procedures, from the school's official website."
+        zh: "从学校官网查找假期、考试和选课期间、证明书等各种手续。"
+        ja: "大学公式サイトから、休業期間・試験や履修登録の期間・証明書などの手続きを調べます。"
+      prompts:
+        - { en: "When is the summer break this year?", zh: "今年暑假是什么时候？", ja: "今年の夏休みはいつ？" }
+        - { en: "When is course registration for the next term?", zh: "下学期的选课登录是什么时候？", ja: "次の学期の履修登録はいつ？" }
+        - { en: "How do I get a certificate of enrolment?", zh: "在学证明怎么开？", ja: "在学証明書はどうやって発行する？" }
   quick_ask_suggestions:
+    - { skill: school-info, text: { en: "When is the summer break this year?", zh: "今年暑假是什么时候？", ja: "今年の夏休みはいつ？" } }
     - { skill: campussquare, text: { en: "What classes do I have today?", zh: "我今天有什么课？", ja: "今日の授業は？" } }
     - { skill: campussquare, text: { en: "Which categories am I still short of?", zh: "我还有哪些区分的学分不够？", ja: "まだ単位が足りない区分は？" } }
     - { skill: campussquare, text: { en: "What is my GPA?", zh: "我的 GPA 是多少？", ja: "私の GPA は？" } }

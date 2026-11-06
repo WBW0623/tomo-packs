@@ -27,8 +27,11 @@ never types a password.
 
 ## When to Use
 
-- "What classes do I have today / this term?", "Is there a cancelled class?", "Did I miss attendance?"
-- "How many credits do I still need?", "Can I graduate?", "Which category am I short in?"
+- "What classes do I have today / this term?", "Is there a cancelled class?", "Which room is my class in?"
+- "How many times have I been absent in X?", "Am I at risk of failing a course for absences?"
+- "How many credits do I still need?", "Can I graduate?", "Which category am I short in?",
+  "Can I start graduation research (卒業研究) next year?"
+- "Why does my grade say 未 / Y?", "Which courses did I fail and must take again?"
 - "What is my GPA?", "What grade did I get in X?", "How much CAP is left?"
 - Course recommendations that must respect the student's timetable, CAP and missing categories.
 - "Can I still get the teaching licence / AI course certificate?"
@@ -48,9 +51,13 @@ then explain where the page is and let the student look.
    `画面に表示する` or `判定` (they only compute and display). Never press `履修登録`/`取消`, the
    `指定された時間割の履修登録はこちらから` link, `設定保存`, calendar date cells (they add Myスケジュール entries),
    `ファイルに出力する` or `テキスト出力` (downloads).
-4. **Minimal data.** Extract only the columns the question needs (`references/extract.md`). Name and student number
-   on every page arrive as `{{FULL_NAME}}` / `{{STUDENT_NUMBER}}`; never try to recover them. Grades, GPA and
-   self-check results are personal data: Tomo asks the student before each item is sent; if refused, answer without it.
+4. **Minimal data; Tomo asks, not you.** CampusSquare is a personal-data site for Tomo: page snapshots there show only
+   headings and controls, and every value you read with `browser_console` is shown to the student first, who decides
+   whether it is sent to you. So extract only the columns the question needs (`references/extract.md`), in as few
+   reads as possible, and never ask the student for permission yourself (no `clarify` for this). If a result says the
+   student did not allow it, answer without it, say what you could not check, and do not ask again. If it says the
+   student chose that Tomo may not read grades, explain where the page is and let them look. Name and student number
+   arrive as `{{FULL_NAME}}` / `{{STUDENT_NUMBER}}`; never try to recover them.
 5. **Sign out when done** with `browser_navigate` to `https://portal.shonan-it.ac.jp/campusweb/portal.do?page=logout`
    unless the student says they will keep using it. The page then shows `ログアウトしました。`
 
@@ -64,7 +71,8 @@ then explain where the page is and let the student look.
    year (default is the student's year) and press `判定`.
    Done when the result tables are present.
 3. **Extract with `browser_console`** using the expressions in `references/extract.md` (compact JSON, one row per
-   course or category). Use `browser_snapshot` only to find a control, not to read long tables.
+   course or category); prefer one extraction that returns everything the question needs, since the student approves
+   each read. Snapshots only show controls here; use them to find a filter or button, never to read data.
    Done when you have the rows the question needs and the page's "as of" note (e.g. `※2026年度前学期終了時点の結果です。`).
 4. **Answer with the source.** Name the page, term and "as of" date; quote numbers exactly as shown. For graduation
    questions, go through every category of the self-check (see Interpretation), not only the total.
@@ -73,6 +81,11 @@ then explain where the page is and let the student look.
 
 ## Interpretation
 
+- **Lower years: judge the right thing.** 自己判定 judges the student's own year by default. For a 3rd year that is
+  the **requirement for starting graduation research** (`□卒業研究履修要件単位`), not graduation. To answer "can I
+  graduate", judge 4年 as well: for anyone not yet in 4th year it shows `留年` because the remaining courses are not
+  taken yet. That is not a prediction: never tell the student they will be held back; say how many credits each
+  category still needs and that the 4th-year result counts only what is earned or registered now.
 - **Graduation needs every category, not just the total.** In 自己判定 each `■` row is a category with its own
   minimum (`基準単位数`); indented rows are its sub-requirements. A student fails graduation if any `■` category is
   short, even with ≥ 124 credits in total. Example: `■学科専門科目（必修・選必・選択）` needs 80. Report the
@@ -80,9 +93,17 @@ then explain where the page is and let the student look.
 - `修得単位数` = earned; `履修単位数` = registered this term, not yet graded; `合格見込み` `〇` = met if the registered
   courses are passed, `×` = still short. `上限単位数` `-` = no upper limit; only credits up to the limit count.
 - The self-check header shows `判定グループ` with the 専攻 (情報学部): use it to confirm the student's major.
-- The header `卒業要件単位数` and the `□卒業要件単位` row can show different numbers; quote both, do not explain the gap.
-- Grades: `評価` is the score (0–100) or `N` for transferred / recognised credit (`評語` `認`); `評語` S/A/B/C; `合否`
-  `合` passed. Leave `N` rows out of score averages.
+- In the 4年 judgement the header `卒業要件単位数` is the credits counted so far and the `□卒業要件単位` row's 基準 is
+  what is required (124); quote both.
+- Grades (official: https://www.shonan-it.ac.jp/campuslife/syllabus/evaluation/): `評価` is the score (0–100) with
+  `評語` S (90–100), A (80–89), B (70–79), C (60–69) = passed; `Ｄ` (59 or less) = failed. `評語` `未` = failed without a
+  score: `評価` `X` = not enough work or no exam to grade, `Y` = **too many absences (5 or more)**, `Z` = other. `N` /
+  `認` = recognised credit (passed, no score). Leave `N` rows out of score averages.
+- Failed courses (`否`) give no credit; they must be registered again in a later term when the course is offered. A
+  passed course cannot be taken again. A retaken course shows twice in 履修成績照会: use the newest row.
+- GPA (official criteria): D, X, Y and Z count as 0 grade points and their credits stay in the denominator; for a
+  retaken course only the newest result counts. A term GPA of 3.50 or more raises the next term's registration
+  limit (CAP) by 4 credits, 3.00–3.49 by 2.
 - `直前学期GPA`, `累積GPA`, `年度GPA`, `学期GPA` are the school's own numbers; never recompute GPA.
 - `登録可能(CAP残り)`: credits that may still be registered this term; recommendations must fit in it. Credits outside
   graduation requirements are not counted there.
@@ -90,7 +111,17 @@ then explain where the page is and let the student look.
   Ignore it when looking for free periods, clashes or recommendations; shorten its long instructor list in answers.
 - `その他（不定期授業、集中授業、特別履修授業など）` courses take no timetable slot.
 - Attendance (`出欠情報`) and cancellations (`休講補講`) are icons per course in 授業情報; `なし` in the icon text means
-  no record.
+  no record. The course detail behind the `出欠情報` link has the per-class record: `○` present, `欠` absent, `他`
+  late or another special case, empty = not held yet or not recorded. Courses without a fixed slot (4th-year ゼミ /
+  卒業研究) usually have no record at all.
+- **Five `欠` in a course = `Y`, failed — a school rule nobody can override**, not even the instructor
+  (official: https://www.shonan-it.ac.jp/campuslife/syllabus/evaluation/, `Y：出席不足（欠席が5回以上）`). With 3 or
+  4 `欠`, say it plainly: "one more absence (or two) and this course fails, and it cannot be fixed afterwards".
+- **Lateness (`他`) is up to each instructor**: some count a few minutes late as present, some count one second as
+  late, some turn e.g. 3 `他` into one `欠`. There is no school-wide rule. Report `他` separately from `欠`, never
+  convert it yourself; when `他` could push a course towards five absences, tell the student to check that course's
+  syllabus (成績評価 / 出席) or ask the instructor how lateness is counted.
+- Classrooms are only in スケジュール管理 (`2限:科目名@1404講義室`); names there are shortened.
 
 ## Pitfalls
 
@@ -102,6 +133,8 @@ then explain where the page is and let the student look.
 - The calendar (スケジュール管理) mixes school events with timetable slots; course slots only appear for courses with a
   fixed day and period.
 - Page texts use full-width letters and digits (`Ｓ`, `１Ａ`); normalise before comparing with syllabus data.
+- 資格自己判定 starts at 判定学年 4年 (unlike 自己判定) and its licence names include entry years (`（2024～）`); choose
+  the right one before pressing `判定`.
 
 ## Verification
 

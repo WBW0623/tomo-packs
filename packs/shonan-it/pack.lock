@@ -2,16 +2,18 @@
   "pack": "shonan-it",
   "version": "0.1.0",
   "files": {
-    "CHANGELOG.md": "b56a887bda2aa990baab1f48338a83d53dd7f3d31e7633ee17e0d271cd745693",
+    "CHANGELOG.md": "a5bb90ee2bb0e7dd52f48026431040002c32e2c667a1a017731d72642bb31779",
     "README.md": "ecdb0aa9801c116e16ad9c375398a541851d7c95598eafb1ca3a88eb9e31456a",
     "data/README.md": "5895b09a395b1335fa5dcb9ca41da4425b012e37f0e4e13c7fa765ee3f71714e",
     "evals/cases.yaml": "5177ab6fc3a03df2835d6a18f54acc8ca8244147822469404ded16035aa078fe",
-    "hatch.yaml": "dfe867c8581b9d810cffd77167b751605dd34c5363d5c47b0735b6b901b0fb24",
-    "pack.yaml": "e418c202bfbc77e24abd15d89e124a165a7c538fb979dd14e72cc45138fe0d43",
+    "hatch.yaml": "0a80ff2bb23769e357d5678b4a70f245e3cab501e067c214def8e923aab940f2",
+    "pack.yaml": "08bd1262a9f1752499045a916e1d0726715cc5db8a2963a01a72aa0380cb53aa",
     "skills/README.md": "010ef3b415beafc06cecb1d41b27e280b6356a1b38f0a4376714a56b9e88b7bf",
-    "skills/campussquare/SKILL.md": "d0b136a25de2139df0acf0288e3cb15d5e60d9627cceed62e060e634c07a5cd6",
-    "skills/campussquare/references/extract.md": "f4231ffa8ffbad4999f6b0e8d229af3994d178621dd48d52f185ebcce4848949",
-    "skills/campussquare/references/pages.md": "c11cec157aa4089b2dcc95631cd6ad85516f5d49971d70767c6392b9d4ca1c26",
+    "skills/campussquare/SKILL.md": "56b8a460c4a981bf9e497fc1f585eda3f2fc54dd75d4f8494fe1297992c494e2",
+    "skills/campussquare/references/extract.md": "17941bb811bbaaf726da4b5aec1fc522d36f7323ec72f4e0dcc3eb6cde917bbc",
+    "skills/campussquare/references/pages.md": "6687d1f966c24c85e655f5d0c1063e3968d8486f87a350eaafc98948435482c7",
+    "skills/school-info/SKILL.md": "d928293874c8ddb9f255df7ce4e92fdaedae43cd32d097b4136c135501b07135",
+    "skills/school-info/references/pages.md": "034a5fc9b9404719676ee275eaf9854ad6292bc7d9706b8da9030a2d015debf5",
     "soul.md": "3afea1730fe1caf5e562588aaba735e267b4d9201cf94b4420b26c5bd94f4965"
   }
 }

@@ -79,7 +79,39 @@ Registered slots only, plus the その他 list.
     });
   }
   const other = [...document.querySelectorAll("article table")].find(x => t(x.innerText).startsWith("その他（不定期"));
-  const others = other ? [...other.rows].slice(2).map(r => [...r.cells].map(c => t(c.innerText))) : [];
+  const others = other ? [...other.rows].slice(2).map(r => [...r.cells].map(c => t(c.innerText))).filter(r => r.length > 1) : [];
   return JSON.stringify({ slots, others });
 })()
 ```
+
+## Attendance of every course (授業情報)
+
+Run on 授業情報 (`JPW0001000-flow`). Reads each course's detail page in the background (same session, read-only)
+and returns per course how many classes were attended (`○`), missed (`欠`) and marked `他` (late / special), plus
+cancellations / make-up notices. One call instead of opening every course. `browser_console` awaits the promise.
+
+```js
+(async () => {
+  const t = s => (s || "").replace(/\s+/g, " ").trim();
+  const links = [...document.querySelectorAll("article a")].filter(a => /出欠情報/.test(a.innerText));
+  const out = [];
+  for (const a of links) {
+    const course = t(a.closest("tr")?.cells[1]?.innerText).replace(/【[^】]*】/g, "");
+    const d = new DOMParser().parseFromString(await (await fetch(a.href, { credentials: "include" })).text(), "text/html");
+    const art = d.querySelector("article");
+    if (!art) { out.push({ course, error: "no detail (signed out?)" }); continue; }
+    const marks = [...art.querySelectorAll("td")].map(td => t(td.textContent)).filter(v => ["○", "欠", "他"].includes(v));
+    const rest = art.cloneNode(true); rest.querySelectorAll("table").forEach(x => x.remove());
+    // the 教室変更 / 休講 / 補講 block without its headings and "none" lines: empty when nothing changed
+    const notices = t(t(rest.textContent).replace("休講補講スケジュール", "").replace(/(教室変更|休講|補講)情報はありません。/g, "")
+      .replace(/出欠情報/g, "").replace(/(^|\s)(教室変更|休講|補講)(?=\s|$)/g, " "));
+    const n = m => marks.filter(x => x === m).length;
+    out.push({ course, present: n("○"), absent: n("欠"), late_or_other: n("他"), notices });
+  }
+  return JSON.stringify(out);
+})()
+```
+
+`absent` of 3 or more: warn (5 absences = `Y`, failed; no exception). `late_or_other` stays separate: how it counts is
+the instructor's rule (syllabus). Empty cells are not counted: classes not held yet.
+

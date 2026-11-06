@@ -192,6 +192,38 @@
           },
           "uniqueItems": true
         },
+        "personal_origins": {
+          "description": "Hosts whose pages hold the student's personal data. Tomo shows the model only headings and controls of these pages and asks the student before sending any value read there. Must also be listed in browser_origins.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/host"
+          },
+          "uniqueItems": true
+        },
+        "personal_consent": {
+          "description": "The Hatch question whose answer can refuse reading personal data at all; with a refusing answer Tomo reads nothing on personal_origins.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "question",
+            "refuse"
+          ],
+          "properties": {
+            "question": {
+              "type": "string",
+              "description": "Hatch question id (a choice question)."
+            },
+            "refuse": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "Option values that refuse."
+            }
+          }
+        },
         "computer_use": {
           "type": "boolean"
         }

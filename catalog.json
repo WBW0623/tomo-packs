@@ -17,14 +17,14 @@
       "domain": "shonan-it.ac.jp",
       "version": "0.1.0",
       "requires": {
-        "tomo": ">=0.9.0",
+        "tomo": ">=0.1.0",
         "hermes": "0.21.x"
       },
       "publisher": {
         "name": "TK",
         "github": "TkYu"
       },
-      "lock_sha256": "eec4e0a75d312929cf57854509d08f739131f0c684938ecd30726794a8b1c13f"
+      "lock_sha256": "7b51f052d4df095188b42bc9f688c9ca2af7d70ebc66aa943ae44a17779aaf3f"
     }
   ]
 }

@@ -107,6 +107,26 @@ def check_skills(pack_dir: Path, manifest: dict, rep: Report) -> None:
         rep.warn(where, f"skills/{extra} exists but is not listed in pack.yaml")
 
 
+def check_personal(manifest: dict, hatch: dict | None, where: str, rep: Report) -> None:
+    """personal_origins must be browser origins; personal_consent must name a choice question and its options."""
+    perm = manifest.get("permissions") or {}
+    origins = set(perm.get("browser_origins") or [])
+    for host in perm.get("personal_origins") or []:
+        if host not in origins:
+            rep.error(where, f"personal_origins: {host} is not in browser_origins")
+    consent = perm.get("personal_consent")
+    if not consent:
+        return
+    question = next((q for q in (hatch or {}).get("questions") or [] if q.get("id") == consent.get("question")), None)
+    if question is None:
+        rep.error(where, f"personal_consent: Hatch has no question '{consent.get('question')}'")
+        return
+    values = {o.get("value") for o in question.get("options") or []}
+    for v in consent.get("refuse") or []:
+        if v not in values:
+            rep.error(where, f"personal_consent: '{v}' is not an option of '{consent.get('question')}'")
+
+
 def check_mcp(pack_dir: Path, manifest: dict, rep: Report) -> None:
     for name in (manifest.get("mcp") or {}):
         if not (pack_dir / "mcp" / name).is_dir():
@@ -237,6 +257,7 @@ def main() -> int:
                 check_hatch(pack_dir, hatch, rep)
         else:
             rep.error(where, "hatch.yaml is missing")
+        check_personal(manifest, hatch if hatch_path.exists() else None, f"{where}/pack.yaml", rep)
         check_skills(pack_dir, manifest, rep)
         check_mcp(pack_dir, manifest, rep)
         secret_scan(pack_dir, rep)

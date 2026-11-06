@@ -55,6 +55,7 @@ questions:
       en: "Replaced before anything is sent. It also tells Tomo your entry year and faculty."
       zh: "发送前会被替换。它也能告诉 Tomo 你的入学年份和学部。"
       ja: "送信前に置き換えます。入学年度と学部の判別にも使います。"
+    # Format: 2 digits entry year, 1 letter faculty (A 工学部, B 情報学部, T 大学院; other letters may come), 4 digits.
     remember: "Student number: {{STUDENT_NUMBER}}."
 
   - id: faculty
@@ -63,13 +64,15 @@ questions:
     type: choice
     label: { en: "Faculty", zh: "学部", ja: "学部" }
     why:
-      en: "Courses with the same name differ between the two faculties."
-      zh: "同名课程在两个学部之间会有差别。"
-      ja: "同じ名前の科目でも学部によって扱いが異なるためです。"
+      en: "Courses, rules and documents differ between the faculties and the graduate school."
+      zh: "课程、规定和资料在各学部与研究生院之间有所不同。"
+      ja: "科目・規則・資料が学部と大学院で異なるためです。"
+    # The faculty letter of the student number; a letter without an option here is not prefilled (the student picks).
     options:
       - { value: A, label: { en: "Faculty of Engineering", zh: "工学部", ja: "工学部" } }
       - { value: B, label: { en: "Faculty of Information", zh: "情报学部", ja: "情報学部" } }
-    prefill_from: { question: student_number, regex: "^[0-9]{2}([AB])", group: 1 }
+      - { value: T, label: { en: "Graduate School of Engineering", zh: "研究生院（工学研究科）", ja: "大学院（工学研究科）" } }
+    prefill_from: { question: student_number, regex: "^[0-9]{2}([A-Z])", group: 1 }
     remember: "Faculty: {answer}."
 
   - id: department
@@ -82,7 +85,7 @@ questions:
       en: "Required courses and credits depend on it."
       zh: "必修课和学分要求取决于它。"
       ja: "必修科目と単位要件が変わるためです。"
-    # Faculty of Engineering departments; Faculty of Information (情報学科) majors.
+    # Faculty of Engineering departments; Faculty of Information (情報学科) majors; graduate school (工学研究科) majors.
     options:
       - { value: 機械工学科, when: "faculty == A", label: { en: "Mechanical Engineering", zh: "机械工学科", ja: "機械工学科" } }
       - { value: 電気電子工学科, when: "faculty == A", label: { en: "Electrical and Electronic Engineering", zh: "电气电子工学科", ja: "電気電子工学科" } }
@@ -94,6 +97,8 @@ questions:
       - { value: 情報工学専攻, when: "faculty == B", label: { en: "Information Engineering major", zh: "情报工学专攻", ja: "情報工学専攻" } }
       - { value: 情報メディア専攻, when: "faculty == B", label: { en: "Information Media major", zh: "情报媒体专攻", ja: "情報メディア専攻" } }
       - { value: 社会情報学専攻, when: "faculty == B", label: { en: "Social Informatics major", zh: "社会情报学专攻", ja: "社会情報学専攻" } }
+      - { value: 機械工学専攻, when: "faculty == T", label: { en: "Mechanical Engineering (graduate)", zh: "机械工学专攻（研究生）", ja: "機械工学専攻（大学院）" } }
+      - { value: 電気情報工学専攻, when: "faculty == T", label: { en: "Electrical and Information Engineering (graduate)", zh: "电气情报工学专攻（研究生）", ja: "電気情報工学専攻（大学院）" } }
     # Faculty of Information: the first of the four digits is the major (1–4). No mapping known for Engineering.
     prefill_from:
       question: student_number
