@@ -9,6 +9,7 @@ describe. Tomo installs packs only from this repository: the `main` branch is th
 | Pack | School | Version |
 |---|---|---|
 | [`shonan-it`](packs/shonan-it) | Shonan Institute of Technology (湘南工科大学) | 0.1.0 (in development) |
+| [`keio`](packs/keio) | Keio University (慶應義塾大学) | 0.1.0 |
 
 ## What a pack contains
 

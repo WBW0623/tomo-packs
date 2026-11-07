@@ -1,0 +1,104 @@
+schema: 1
+version: 1
+sections:
+  - id: academic
+    title: { en: "Your academic context", zh: "学业信息", ja: "所属・学修情報" }
+    intro:
+      en: You can skip every question. Sign in yourself in the visible browser; never give Tomo a password.
+      zh: 每个问题都可以跳过。请自行在可见浏览器中登录，不要向 Tomo 提供密码。
+      ja: すべての質問をスキップできます。見えるブラウザでご自身でログインし、Tomoにパスワードを渡さないでください。
+questions:
+  - id: program
+    section: academic
+    ask: setup
+    type: text
+    label: { en: "Program or degree level", zh: "课程序别／学位阶段", ja: "課程・学位区分" }
+    placeholder: { en: "Enter your program as shown in My Page", zh: "按 My Page 的课程序别填写", ja: "My Pageの課程表示に沿って入力" }
+    why:
+      en: Undergraduate and graduate programs use different academic requirements; enter your own program without a preset list.
+      zh: 学部与大学院等课程的学业要求不同，请自行填写，不使用预置选项。
+      ja: 学部・大学院などの課程により要件が異なります。選択肢ではなく、ご自身の課程を入力してください。
+    remember: "Keio program or degree level: {answer}."
+  - id: faculty
+    section: academic
+    ask: setup
+    type: text
+    label: { en: "Faculty or graduate school", zh: "学部或研究科", ja: "学部・研究科" }
+    placeholder: { en: "Enter your faculty or graduate school", zh: "自行填写学部或研究科名称", ja: "学部・研究科名を入力" }
+    why:
+      en: Academic rules and available records differ by faculty and graduate school.
+      zh: 不同学部和研究科的学业规则及可查看的记录不同。
+      ja: 学部・研究科により学則や閲覧できる記録が異なるためです。
+    remember: "Keio faculty or graduate school: {answer}."
+  - id: department
+    section: academic
+    ask: setup
+    type: text
+    label: { en: "Department or major", zh: "学科或专攻", ja: "学科・専攻" }
+    placeholder: { en: "Enter your department or major", zh: "自行填写学科或专攻名称", ja: "学科・専攻名を入力" }
+    why:
+      en: Course requirements depend on your department or major. Any department or major name can be entered.
+      zh: 课程要求取决于学科或专攻，可填写任意学科或专攻名称。
+      ja: 履修要件は学科・専攻により異なります。どの学科・専攻名でも入力できます。
+    remember: "Keio department or major: {answer}."
+  - id: year_level
+    section: academic
+    ask: later
+    type: text
+    label: { en: "Year level", zh: "年级", ja: "学年" }
+    why:
+      en: Used when requirements or notices depend on year level. Free text accommodates different undergraduate and graduate programs.
+      zh: 在规则或通知与年级有关时使用；自由填写以适应不同学部和大学院课程。
+      ja: 学年別の要件や通知を確認するためです。学部・大学院の課程に合わせて自由に入力できます。
+    remember: "Keio year level: {answer}."
+  - id: entry_year
+    section: academic
+    ask: later
+    type: text
+    label: { en: "Entry academic year", zh: "入学年度", ja: "入学年度" }
+    why:
+      en: Used when the applicable curriculum or rules differ by entry cohort. Do not infer it from your student number.
+      zh: 在课程体系或规则按入学年度区分时使用，不从学号猜测。
+      ja: 入学年度別のカリキュラムや学則を確認するためです。学籍番号から推測しません。
+    remember: "Keio entry academic year: {answer}."
+  - id: full_name
+    section: academic
+    ask: setup
+    type: identifier
+    variable: FULL_NAME
+    aliases: [name, furigana]
+    label: { en: "Your name", zh: "你的姓名", ja: "氏名" }
+    why:
+      en: Used locally to replace your name before page information is sent to the model.
+      zh: 用于在本地识别并替换页面中的姓名，替换后才向模型发送信息。
+      ja: ページ情報をモデルに送信する前に、端末内で氏名を識別して置き換えるためです。
+    remember: "The student's name is {{FULL_NAME}}."
+  - id: student_number
+    section: academic
+    ask: setup
+    type: identifier
+    variable: STUDENT_NUMBER
+    label: { en: "Student number", zh: "学号", ja: "学籍番号" }
+    why:
+      en: Used locally to replace your student number before page information is sent to the model.
+      zh: 用于在本地替换页面中的学号，替换后才向模型发送信息。
+      ja: ページ情報をモデルに送信する前に、端末内で学籍番号を置き換えるためです。
+    remember: "Student number: {{STUDENT_NUMBER}}."
+  - id: academic_consent
+    section: academic
+    ask: setup
+    type: choice
+    label:
+      en: May Tomo read your academic records when you ask?
+      zh: 你提问时，是否允许 Tomo 读取学业记录？
+      ja: ご質問の際、Tomoが学修記録を読み取ってもよいですか？
+    why:
+      en: Needed for student-profile, leave/study-abroad, timetable, grade, GPA and credit queries. You must be present; Tomo asks before sending each read to the model. Names and student numbers use placeholders.
+      zh: 查询学籍、休学／留学、课表、成绩、GPA 和学分需要读取记录。你必须在场，每次向模型发送读取内容前仍会征求同意；姓名和学号使用占位符。
+      ja: 学籍・休学留学・時間割・成績・GPA・単位の照会に必要です。必ずご本人が立ち会い、モデルに送る前にTomoが確認します。氏名と学籍番号はプレースホルダーで扱います。
+    options:
+      - value: watch
+        label: { en: "Yes, while I watch", zh: "允许，且必须在我注视下进行", ja: "はい、私が見ている間だけ" }
+      - value: never
+        label: { en: "No", zh: "不允许", ja: "いいえ" }
+    remember: "Keio academic-record reading: {answer}. Read only in the visible browser while the student is present; never read when the answer is never."

@@ -1,0 +1,104 @@
+schema: 1
+id: keio
+name:
+  en: Keio University Pack
+  zh: 庆应义塾大学学校包
+  ja: 慶應義塾大学パック
+school:
+  name:
+    en: Keio University
+    zh: 庆应义塾大学
+    ja: 慶應義塾大学
+  short: 慶應義塾大学
+  domain: keio.ac.jp
+  country: JP
+version: 0.1.0
+description:
+  en: For Keio undergraduate and graduate students across faculties and graduate schools. Read student profile, courses, timetable, grades, displayed GPA and credit summaries through K-Support.
+  zh: 面向庆应全校各学部与大学院学生，通过 K-Support 读取学籍、课程、课表、成绩、页面显示的 GPA 和学分汇总。
+  ja: 慶應の全学部・大学院生を対象に、K-Supportから学籍・履修科目・時間割・成績・表示されたGPA・単位集計を読み取ります。
+license: MIT
+publisher:
+  name: WBW
+  github: WBW0623
+requires:
+  tomo: ">=0.1.0"
+  hermes: "0.21.x"
+permissions:
+  network:
+    - www.students.keio.ac.jp
+    - www.keio.ac.jp
+    - www.itc.keio.ac.jp
+  browser_origins:
+    - keio.jp
+    - portal.keio.jp
+    - keio.okta.com
+    - keiouniversity.my.site.com
+    - gacad.keio.jp
+    - lms.keio.jp
+    - tool.klms.keio.jp
+  personal_origins:
+    - keio.jp
+    - portal.keio.jp
+    - keio.okta.com
+    - keiouniversity.my.site.com
+    - gacad.keio.jp
+    - lms.keio.jp
+    - tool.klms.keio.jp
+  personal_data:
+    - timetable
+    - grades
+    - contact # My Page identity/profile fields; identifiers are returned only as placeholders.
+  personal_consent:
+    question: academic_consent
+    refuse: [never]
+  computer_use: false
+sources:
+  official:
+    - keio.ac.jp
+    - keio.jp
+    - keiouniversity.my.site.com
+  refresh:
+    academic_records: manual
+skills:
+  - k-support
+ui:
+  quick_topics:
+    - id: student-profile
+      icon: file
+      skill: k-support
+      label: { en: "My student record", zh: "学籍信息", ja: "学籍情報" }
+      description:
+        en: Read your program, affiliation, major, year/class, displayed leave/study-abroad history and leave-semester count from My Page.
+        zh: 从 My Page 读取课程序别、所属、专业、年级／班级、页面显示的休学／留学历史和休学学期数。
+        ja: My Pageから課程・所属・学科専攻・学年クラス・表示された休学留学歴と休学学期数を読み取ります。
+      prompts:
+        - { en: "What student record does My Page show?", zh: "My Page 显示了哪些学籍信息？", ja: "My Pageの学籍情報を確認して。" }
+        - { en: "What leave-semester count is displayed?", zh: "页面显示的当前休学学期数是多少？", ja: "現在の休学学期数は？" }
+    - id: timetable
+      icon: calendar
+      skill: k-support
+      label: { en: "My courses & timetable", zh: "课程与课表", ja: "履修科目・時間割" }
+      description:
+        en: Read registered courses and their recurring schedule from K-Support's academic system.
+        zh: 从 K-Support 的教务系统读取已登记课程及每周课程安排。
+        ja: K-Supportの学事システムから登録済科目と毎週の時間割を読み取ります。
+      prompts:
+        - { en: "What courses am I taking this term?", zh: "这学期我登记了哪些课程？", ja: "今学期の登録済科目は？" }
+        - { en: "What is my Tuesday timetable?", zh: "我周二的课表是什么？", ja: "火曜日の時間割は？" }
+    - id: grades
+      icon: graduation
+      skill: k-support
+      label: { en: "Grades, GPA & credits", zh: "成绩、GPA 与学分", ja: "成績・GPA・単位" }
+      description:
+        en: Read displayed grades, GPA, and earned versus expected credits while you watch the browser.
+        zh: 在你看着浏览器时读取成绩、页面显示的 GPA，以及已取得和预计取得的学分。
+        ja: ブラウザをご覧いただきながら成績・表示されたGPA・修得済と取得見込みの単位を読み取ります。
+      prompts:
+        - { en: "What GPA does my grade report show?", zh: "我的成绩表上显示的 GPA 是多少？", ja: "学業成績表に表示されたGPAは？" }
+        - { en: "How many credits are earned and how many are expected?", zh: "已取得和预计取得的学分各有多少？", ja: "修得済単位と取得見込み単位はそれぞれいくつ？" }
+  quick_ask_suggestions:
+    - skill: k-support
+      text: { en: "What courses am I taking this term?", zh: "这学期我登记了哪些课程？", ja: "今学期の登録済科目は？" }
+    - skill: k-support
+      text: { en: "What GPA does my grade report show?", zh: "我的成绩表上显示的 GPA 是多少？", ja: "学業成績表に表示されたGPAは？" }

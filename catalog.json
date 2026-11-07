@@ -2,6 +2,31 @@
   "schema": 1,
   "packs": [
     {
+      "id": "keio",
+      "name": {
+        "en": "Keio University Pack",
+        "zh": "庆应义塾大学学校包",
+        "ja": "慶應義塾大学パック"
+      },
+      "school": {
+        "en": "Keio University",
+        "zh": "庆应义塾大学",
+        "ja": "慶應義塾大学"
+      },
+      "short": "慶應義塾大学",
+      "domain": "keio.ac.jp",
+      "version": "0.1.0",
+      "requires": {
+        "tomo": ">=0.1.0",
+        "hermes": "0.21.x"
+      },
+      "publisher": {
+        "name": "WBW",
+        "github": "WBW0623"
+      },
+      "lock_sha256": "d7dfdead5b58500b8d97d4bc60dadaed03eb710a740c9fcba9936aefb4beda24"
+    },
+    {
       "id": "shonan-it",
       "name": {
         "en": "Shonan Institute of Technology Pack",

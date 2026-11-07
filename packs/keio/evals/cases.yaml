@@ -1,0 +1,42 @@
+schema: 1
+cases:
+  - id: academic-profile
+    question: My Page 显示我属于哪个学部或研究科、哪个专业和年级？
+    expected:
+      cite: [keiouniversity.my.site.com]
+      contains: [My Page]
+  - id: leave-semesters
+    question: What is the current leave-semester count shown in My Page?
+    expected:
+      cite: [keiouniversity.my.site.com]
+      contains: [My Page]
+  - id: registered-courses
+    question: 这学期我登记了哪些课程？
+    expected:
+      cite: [gacad.keio.jp]
+      contains: [登録済科目確認]
+  - id: displayed-gpa
+    question: 我的成绩表上显示的 GPA 是多少？
+    expected:
+      cite: [gacad.keio.jp]
+      contains: [GPA]
+  - id: cumulative-gpa
+    question: What is my cumulative GPA?
+    expected:
+      cite: [gacad.keio.jp]
+      contains: [CUMULATIVE]
+  - id: displayed-determination
+    question: What does my grade report show under Determination?
+    expected:
+      cite: [gacad.keio.jp]
+      contains: [Determination]
+  - id: category-credit-totals
+    question: What are the category Total Credits shown in my grade report?
+    expected:
+      cite: [gacad.keio.jp]
+      contains: [Total Credits]
+  - id: earned-expected-credits
+    question: How many credits are earned and how many are expected?
+    expected:
+      cite: [gacad.keio.jp]
+      contains: [前学期までに取得済, 今学期以降取得見込み]

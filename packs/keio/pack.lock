@@ -1,0 +1,21 @@
+{
+  "pack": "keio",
+  "version": "0.1.0",
+  "files": {
+    "CHANGELOG.md": "b731e9959d2bae1efac21941a5732472b30d79c7d158517204fe56c94229298d",
+    "evals/cases.yaml": "f20d126e2d9e268aa4b1d80adb18f22984195e7128b3de7607b8f74fd46dae2a",
+    "evals/extraction-fixtures.js": "d0a78dabc8da3da6f848e37f00c2a6e24d293f97e4e0c5518ac08c902afa3563",
+    "evals/profile-fixtures.js": "bd18f7d90d6439d67b52dc0916329a8d05950007658c3623966656d45ef43757",
+    "hatch.yaml": "f10f52f75fb290f7f06f187bfb4c85b9c2edae0fc1be19377e3fca02b7da3a2d",
+    "pack.yaml": "55972996325399d2436f55ded2966504a06bae0e38ceea800f85bef354d37fc6",
+    "README.md": "326b54e9119aaaf979268602f9ef822e5d7fb54fae560ea7554999f68af35e0f",
+    "skills/k-support/references/attendance.md": "821430c64e6cc80e6927df843c999167a391e20d61511472b35f00a227bb6087",
+    "skills/k-support/references/extract.md": "807447c00362beedd1293492183d9b1bcddad535e5ae9955f28aadb3ad505731",
+    "skills/k-support/references/pages.md": "a2b10c0e3e29d59d78d51d00a29bc88f29b0fcfe50910472fdb729a5ce241d94",
+    "skills/k-support/references/profile.md": "a1cbf8b0e28d8e6ccfbfa9a7d17c722e7170c276d4311b5d0be32abd0cd0d478",
+    "skills/k-support/scripts/read-academic.js": "eaecf491c1cd5c024bf0729642ffdb574214a21adb8578937a425d0ce6fbfe43",
+    "skills/k-support/scripts/read-profile.js": "6c0476b5b71623e304e564cf2a3f87e9704696ddcc19152b0e78c1de51fa8ded",
+    "skills/k-support/SKILL.md": "e64830e6d538aec411720a0728a7909c19b4de6d2d3fc342d948dd96b675c1e1",
+    "soul.md": "2f139c6a6911bf49a1fe156aa3585c6675bd446ef9ca27e931cfb18bc56083af"
+  }
+}
